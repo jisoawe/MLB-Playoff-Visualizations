@@ -1,0 +1,35 @@
+---
+name: Mojisoluwa (Jiso) Awe
+title: "Playoff Odds vs SRS"
+output: html_notebook
+---
+
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+
+
+
+
+
+```{r}
+## data from baseball reference from august 25th
+dt <- read.csv('playoffdata.csv')
+dt
+```
+
+before visualizing it:
+-use grepl to remove the % signs from the post, WC, div, LDS, LCS, Pennant, WinWS
+-then get rid of the first empty row, na.rm
+-THEN the graph
+
+```{r}
+viz <-
+  dt%>%
+  ggplot(aes(x = ))
+```
+
