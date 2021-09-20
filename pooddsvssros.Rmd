@@ -7,9 +7,12 @@ output: html_notebook
 
 
 ```{r}
+library(tidyverse) 
 library(ggplot2)
-library(tidyverse)
 library(dplyr)
+library(tidyr)
+library(lubridate)
+library(taRifx)
 ```
 
 
@@ -22,6 +25,31 @@ dt <- read.csv('playoffdata.csv')
 dt
 ```
 
+```{r}
+dt$Post <-
+  gsub('%', ' ', as.character(dt$Post))
+dt
+```
+
+
+```{r}
+## removing the greater than and less than signs from the data
+dt[dt == '<0.1'] <- '0.1'
+dt[dt == '>99.9'] <- '99.9'
+dt
+```
+
+
+
+```{r}
+dt$Post <- as.numeric(as.character(dt$Post))
+dt
+```
+
+
+
+
+
 before visualizing it:
 -use grepl to remove the % signs from the post, WC, div, LDS, LCS, Pennant, WinWS
 -then get rid of the first empty row, na.rm
@@ -30,6 +58,8 @@ before visualizing it:
 ```{r}
 viz <-
   dt%>%
-  ggplot(aes(x = ))
+  ggplot(aes(x = Post, y = rSOS, color = Tm)) +
+  geom_point(stat = 'identity')
+viz
 ```
 
