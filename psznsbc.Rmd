@@ -1,0 +1,104 @@
+
+name: 'Mojisoluwa (Jiso) Awe'
+title: "Post Season Visualizations"
+output: html_notebook
+---
+
+# The Post Season
+
+During every MLB season the question of which teams are making it to the post season are frequent topics of debate.
+
+
+```{r}
+##loading packages
+library(ggplot2)
+library(dplyr)
+library(teamcolors)
+```
+
+
+
+
+```{r}
+dt <- read.csv('playoff-odds.csv')
+
+dt
+```
+
+
+```{r}
+dt <- 
+  dt %>%
+  rename(Tm = `X.1`,
+         Lg = `X.2`,
+         D = `X.3`,
+         W = `Current`,
+         L = `Current.1`,
+         Post = `X.11`,
+         WC = `X.12`,
+         Div = `X.13`,
+         LDS = `X.14`,
+         LCS = `X.15`,
+         Pennant = `X.16`,
+         WinWS = `X.17`)
+dt <- dt[, c(2, 3, 4, 8, 9, 20, 21, 22, 23, 24, 25)]
+dt
+```
+
+
+```{r}
+dt1 <- dt[-c(1),]
+dt1
+```
+
+```{r}
+dt1$Post <-
+  gsub('%', ' ', as.character(dt1$Post)) %>%
+  as.numeric(as.character(dt1$Post))
+
+dt1$WC <-
+  gsub('%', ' ', as.character(dt1$WC)) %>%
+  as.numeric(as.character(dt1$WC))
+
+dt1$Div <-
+  gsub('%', ' ', as.character(dt1$Div)) %>%
+  as.numeric(as.character(dt1$Div))
+
+dt1$LDS <-
+  gsub('%', ' ', as.character(dt1$LDS)) %>%
+  as.numeric(as.character(dt1$LDS))
+
+dt1$LCS <-
+  gsub('%', ' ', as.character(dt1$LCS)) %>%
+  as.numeric(as.character(dt1$LCS))
+
+dt1$Pennant <-
+  gsub('%', ' ', as.character(dt1$Pennant)) %>%
+  as.numeric(as.character(dt1$Pennant))
+
+dt1
+```
+
+
+# Visualizations
+
+
+```{r}
+bg <-
+  final%>%
+  ggplot(aes(x='', y= 'Win WS', fill= Tm)) +
+  geom_bar(width = 1, stat = 'identity') +
+  ylab('WS Percentage') +
+  ggrepel::geom_text_repel(aes(label = Tm))
+
+bg <- bg%>%
+  left_join(teamcolors, by = "name")
+with(pythag, plot(wpct, exp_wpct, bg = primary, col = secondary, pch = 21, cex = 3))
+
+```
+
+
+```{r}
+pie <- bg + coord_polar('y', start = 0)
+pie
+```
